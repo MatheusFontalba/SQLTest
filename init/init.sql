@@ -1,9 +1,9 @@
 ------------------------------------------------------------
--- 0. Criação do banco (estilo BiddingDB)
+-- 0. DB Creation(BiddingDB)
 ------------------------------------------------------------
 IF DB_ID('BiddingDB') IS NULL
 BEGIN
-    PRINT 'Criando banco BiddingDB...';
+    PRINT 'Creating database BiddingDB...';
     CREATE DATABASE BiddingDB;
 END
 GO
@@ -12,13 +12,13 @@ USE BiddingDB;
 GO
 
 ------------------------------------------------------------
--- 1. Tabelas (CREATE IF NOT EXISTS)
+-- 1. Tables (CREATE IF NOT EXISTS)
 ------------------------------------------------------------
 
 -- 1.1 Facility
 IF OBJECT_ID('dbo.Facility', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.Facility...';
+    PRINT 'Creating table dbo.Facility...';
     CREATE TABLE dbo.Facility (
         FacilityId        INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         SourceId          INT NULL,
@@ -38,7 +38,7 @@ GO
 -- 1.2 Landowner
 IF OBJECT_ID('dbo.Landowner', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.Landowner...';
+    PRINT 'Creating table dbo.Landowner...';
     CREATE TABLE dbo.Landowner (
         LandownerId      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         LandownerName    NVARCHAR(200) NOT NULL,
@@ -57,7 +57,7 @@ GO
 -- 1.3 BidPackage
 IF OBJECT_ID('dbo.BidPackage', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.BidPackage...';
+    PRINT 'Creating table dbo.BidPackage...';
     CREATE TABLE dbo.BidPackage (
         BidPackageId     INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         BidPackageName   NVARCHAR(200) NOT NULL,
@@ -74,7 +74,7 @@ GO
 -- 1.4 FacilityWork
 IF OBJECT_ID('dbo.FacilityWork', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.FacilityWork...';
+    PRINT 'Creating table dbo.FacilityWork...';
     CREATE TABLE dbo.FacilityWork (
         FacilityWorkId     INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         FacilityId         INT NOT NULL,
@@ -94,7 +94,7 @@ GO
 -- 1.5 BidPackageFacilityWork
 IF OBJECT_ID('dbo.BidPackageFacilityWork', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.BidPackageFacilityWork...';
+    PRINT 'Creating table dbo.BidPackageFacilityWork...';
     CREATE TABLE dbo.BidPackageFacilityWork (
         BidPackageFacilityWorkId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         BidPackageId             INT NOT NULL,
@@ -116,7 +116,7 @@ GO
 -- 1.6 BidResponse
 IF OBJECT_ID('dbo.BidResponse', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.BidResponse...';
+    PRINT 'Creating table dbo.BidResponse...';
     CREATE TABLE dbo.BidResponse (
         BidResponseId       INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         BidPackageId        INT NOT NULL,
@@ -138,7 +138,7 @@ GO
 -- 1.7 BidResponseFacilityWork
 IF OBJECT_ID('dbo.BidResponseFacilityWork', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.BidResponseFacilityWork...';
+    PRINT 'Creating table dbo.BidResponseFacilityWork...';
     CREATE TABLE dbo.BidResponseFacilityWork (
         BidResponseFacilityWorkId      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         BidResponseId                  INT NOT NULL,
@@ -164,7 +164,7 @@ GO
 -- 1.8 Invoice
 IF OBJECT_ID('dbo.Invoice', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.Invoice...';
+    PRINT 'Creating table dbo.Invoice...';
     CREATE TABLE dbo.Invoice (
         InvoiceId      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         BidResponseId  INT NOT NULL,
@@ -185,7 +185,7 @@ GO
 -- 1.9 InvoiceFacilityWork
 IF OBJECT_ID('dbo.InvoiceFacilityWork', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.InvoiceFacilityWork...';
+    PRINT 'Creating table dbo.InvoiceFacilityWork...';
     CREATE TABLE dbo.InvoiceFacilityWork (
         InvoiceFacilityWorkId      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         InvoiceId                  INT NOT NULL,
@@ -212,7 +212,7 @@ GO
 -- 1.10 LandownerFacilityLink
 IF OBJECT_ID('dbo.LandownerFacilityLink', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.LandownerFacilityLink...';
+    PRINT 'Creating table dbo.LandownerFacilityLink...';
     CREATE TABLE dbo.LandownerFacilityLink (
         LandownerFacilityLinkId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         LandownerId             INT NOT NULL,
@@ -233,7 +233,7 @@ GO
 -- 1.11 LandownerBidResponseLink
 IF OBJECT_ID('dbo.LandownerBidResponseLink', 'U') IS NULL
 BEGIN
-    PRINT 'Criando tabela dbo.LandownerBidResponseLink...';
+    PRINT 'Creating table dbo.LandownerBidResponseLink...';
     CREATE TABLE dbo.LandownerBidResponseLink (
         LandownerBidResponseLinkId INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
         LandownerId                INT NOT NULL,
@@ -252,8 +252,8 @@ END
 GO
 
 ------------------------------------------------------------
--- 2. Bulk inserts RANDÔMICOS (>= 20 registros por tabela)
---    Cada bloco só roda se a tabela estiver vazia.
+-- 2. Bulk inserts RANDOM (>= 20 records per table)
+--    Each block only runs if the table is empty.
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -261,8 +261,7 @@ GO
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.Facility)
 BEGIN
-    PRINT 'Inserindo registros em dbo.Facility...';
-
+    PRINT 'Inserting records into dbo.Facility...';
     INSERT INTO dbo.Facility
         (SourceId, SourceKeyValue, FacilityType, SourceAttributes, Attributes, CreatedBy)
     SELECT TOP (20)
@@ -287,8 +286,7 @@ GO
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.Landowner)
 BEGIN
-    PRINT 'Inserindo registros em dbo.Landowner...';
-
+    PRINT 'Inserting records into dbo.Landowner...';
     INSERT INTO dbo.Landowner
         (LandownerName, Attributes, CreatedBy, CoNo, LandownerType, LandownerStatus)
     SELECT TOP (20)
@@ -304,7 +302,7 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.Landowner já possui registros. Nada a fazer.';
+    PRINT 'dbo.Landowner already has records. Nothing to do.';
 END
 GO
 
@@ -313,7 +311,7 @@ GO
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.BidPackage)
 BEGIN
-    PRINT 'Inserindo registros em dbo.BidPackage...';
+    PRINT 'Inserting records into dbo.BidPackage...';
 
     INSERT INTO dbo.BidPackage
         (BidPackageName, BidPackageStatus, Attributes, CreatedBy)
@@ -332,17 +330,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.BidPackage já possui registros. Nada a fazer.';
+    PRINT 'dbo.BidPackage already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.4 FacilityWork (depende de Facility)
+-- 2.4 FacilityWork (depends on Facility)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.FacilityWork)
 BEGIN
-    PRINT 'Inserindo registros em dbo.FacilityWork...';
-
+    PRINT 'Inserting records into dbo.FacilityWork...';
     INSERT INTO dbo.FacilityWork
         (FacilityId, FacilityWorkType, Attributes, CreatedBy, SourceAttributes)
     SELECT TOP (20)
@@ -357,17 +354,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.FacilityWork já possui registros. Nada a fazer.';
+    PRINT 'dbo.FacilityWork already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.5 BidPackageFacilityWork (depende de BidPackage e FacilityWork)
+-- 2.5 BidPackageFacilityWork (depends on BidPackage and FacilityWork)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.BidPackageFacilityWork)
 BEGIN
-    PRINT 'Inserindo registros em dbo.BidPackageFacilityWork...';
-
+    PRINT 'Inserting records into dbo.BidPackageFacilityWork...';
     INSERT INTO dbo.BidPackageFacilityWork
         (BidPackageId, FacilityWorkId, Attributes, CreatedBy, ReferenceNo)
     SELECT TOP (20)
@@ -382,17 +378,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.BidPackageFacilityWork já possui registros. Nada a fazer.';
+    PRINT 'dbo.BidPackageFacilityWork already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.6 BidResponse (depende de BidPackage)
+-- 2.6 BidResponse (depends on BidPackage)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.BidResponse)
 BEGIN
-    PRINT 'Inserindo registros em dbo.BidResponse...';
-
+    PRINT 'Inserting records into dbo.BidResponse...';
     INSERT INTO dbo.BidResponse
         (BidPackageId, BidResponseStatus, BidResponseDate,
          Attributes, CreatedBy, BidResponseAmount, UnInvoicedWorkTotal)
@@ -414,17 +409,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.BidResponse já possui registros. Nada a fazer.';
+    PRINT 'dbo.BidResponse already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.7 BidResponseFacilityWork (depende de BidResponse e BidPackageFacilityWork)
+-- 2.7 BidResponseFacilityWork (depends on BidResponse and BidPackageFacilityWork)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.BidResponseFacilityWork)
 BEGIN
-    PRINT 'Inserindo registros em dbo.BidResponseFacilityWork...';
-
+    PRINT 'Inserting records into dbo.BidResponseFacilityWork...';
     INSERT INTO dbo.BidResponseFacilityWork
         (BidResponseId, BidPackageFacilityWorkId,
          BidResponseFacilityWorkAmount, BidResponseFacilityWorkStatus,
@@ -446,17 +440,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.BidResponseFacilityWork já possui registros. Nada a fazer.';
+    PRINT 'dbo.BidResponseFacilityWork already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.8 Invoice (depende de BidResponse)
+-- 2.8 Invoice (depends on BidResponse)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.Invoice)
 BEGIN
-    PRINT 'Inserindo registros em dbo.Invoice...';
-
+    PRINT 'Inserting records into dbo.Invoice...';
     INSERT INTO dbo.Invoice
         (BidResponseId, InvoiceAmount, InvoiceStatus, InvoiceDate,
          Attributes, CreatedBy)
@@ -477,17 +470,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.Invoice já possui registros. Nada a fazer.';
+    PRINT 'dbo.Invoice already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.9 InvoiceFacilityWork (depende de Invoice e BidResponseFacilityWork)
+-- 2.9 InvoiceFacilityWork (depends on Invoice and BidResponseFacilityWork)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.InvoiceFacilityWork)
 BEGIN
-    PRINT 'Inserindo registros em dbo.InvoiceFacilityWork...';
-
+    PRINT 'Inserting records into dbo.InvoiceFacilityWork...';
     INSERT INTO dbo.InvoiceFacilityWork
         (InvoiceId, BidResponseFacilityWorkId,
          InvoiceFacilityWorkStatus, InvoiceFacilityWorkDate,
@@ -515,17 +507,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.InvoiceFacilityWork já possui registros. Nada a fazer.';
+    PRINT 'dbo.InvoiceFacilityWork already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.10 LandownerFacilityLink (depende de Landowner e Facility)
+-- 2.10 LandownerFacilityLink (depends on Landowner and Facility)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.LandownerFacilityLink)
 BEGIN
-    PRINT 'Inserindo registros em dbo.LandownerFacilityLink...';
-
+    PRINT 'Inserting records into dbo.LandownerFacilityLink...';
     INSERT INTO dbo.LandownerFacilityLink
         (LandownerId, FacilityId, Attributes, CreatedBy)
     SELECT TOP (20)
@@ -539,17 +530,16 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.LandownerFacilityLink já possui registros. Nada a fazer.';
+    PRINT 'dbo.LandownerFacilityLink already has records. Nothing to do.';
 END
 GO
 
 ------------------------------------------------------------
--- 2.11 LandownerBidResponseLink (depende de Landowner e BidResponse)
+-- 2.11 LandownerBidResponseLink (depends on Landowner and BidResponse)
 ------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.LandownerBidResponseLink)
 BEGIN
-    PRINT 'Inserindo registros em dbo.LandownerBidResponseLink...';
-
+    PRINT 'Inserting records into dbo.LandownerBidResponseLink...';
     INSERT INTO dbo.LandownerBidResponseLink
         (LandownerId, BidResponseId, Attributes, CreatedBy)
     SELECT TOP (20)
@@ -563,6 +553,6 @@ BEGIN
 END
 ELSE
 BEGIN
-    PRINT 'dbo.LandownerBidResponseLink já possui registros. Nada a fazer.';
+    PRINT 'dbo.LandownerBidResponseLink already has records. Nothing to do.';
 END
 GO
