@@ -46,7 +46,7 @@ services:
     entrypoint: >
       bash -c "
       /opt/mssql-tools/bin/sqlcmd -S sqlserver,1433 -U sa -P '@@Matheus#2025' -i /init/init.sql
-      && echo 'Seed executed with success'
+      && echo 'Seed executed successfully'
       || (echo 'Seed Failed' && exit 1)
       "
     restart: "no"
