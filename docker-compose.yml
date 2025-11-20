@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-bidding-db
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
+      - MSSQL_SA_PASSWORD=@@Matheus#2025
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+  db-init:
+    image: mcr.microsoft.com/mssql-tools:latest
+    depends_on:
+      - sqlserver
+    environment:
+      - SA_PASSWORD=@@Matheus#2025
+    volumes:
+      - ./init:/init:ro
+    entrypoint: >
+      bash -c "
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver,1433 -U sa -P '@@Matheus#2025' -i /init/init.sql
+      && echo 'Seed executado com sucesso'
+      || (echo 'Falha ao executar seed' && exit 1)
+      "
+    restart: "no"
+
+volumes:
+  mssql-data:
